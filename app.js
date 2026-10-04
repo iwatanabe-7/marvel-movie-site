@@ -19,6 +19,11 @@ const NEXT = releaseOrder.find(isUpcoming);
 // 一番目立たせる作品：次回公開作（無ければ最新作）
 const FEATURED = NEXT || LATEST;
 
+// Google Analytics のイベント送信（gtag が読み込めない環境でもエラーにしない）
+function track(name, params = {}) {
+  if (typeof gtag === "function") gtag("event", name, params);
+}
+
 function formatDate(iso) {
   const [y, mo, d] = iso.split("-").map(Number);
   return `${y}.${String(mo).padStart(2, "0")}.${String(d).padStart(2, "0")}`;
@@ -161,7 +166,7 @@ function renderSpotlight() {
   $spot.innerHTML = html;
   $spot.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-id]");
-    if (btn) openModal(btn.dataset.id);
+    if (btn) openModal(btn.dataset.id, "spotlight");
   });
   if (FEATURED === NEXT) startCountdown();
 }
@@ -190,9 +195,10 @@ function renderFilters() {
     </button>`).join("");
 }
 
-function openModal(id) {
+function openModal(id, source) {
   const m = MOVIES.find((x) => x.id === id);
   if (!m) return;
+  track("view_movie", { movie_id: m.id, movie_title: m.title, source });
   $modal.classList.toggle("variant", !!m.branch);
   $modalBody.innerHTML = `
     <div class="modal-hero ${m.branch ? "branch" : ""}">
@@ -222,6 +228,7 @@ function openModal(id) {
 document.querySelectorAll(".seg-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     state.order = btn.dataset.order;
+    track("change_order", { order: state.order });
     document.querySelectorAll(".seg-btn").forEach((b) => {
       const active = b === btn;
       b.classList.toggle("is-active", active);
@@ -236,17 +243,22 @@ $filters.addEventListener("click", (e) => {
   const chip = e.target.closest(".chip");
   if (!chip) return;
   state.phase = chip.dataset.phase;
+  track("filter_phase", { phase: state.phase });
   renderFilters();
   render();
 });
 
 $timeline.addEventListener("click", (e) => {
   const card = e.target.closest(".card");
-  if (card) openModal(card.dataset.id);
+  if (card) openModal(card.dataset.id, "timeline");
 });
 
 document.getElementById("modalClose").addEventListener("click", () => $modal.close());
 $modal.addEventListener("click", (e) => { if (e.target === $modal) $modal.close(); });
+$modalBody.addEventListener("click", (e) => {
+  const link = e.target.closest(".tmdb-link");
+  if (link) track("click_tmdb", { link_url: link.href });
+});
 window.matchMedia("(min-width: 720px)").addEventListener("change", drawBranches);
 
 renderSpotlight();
