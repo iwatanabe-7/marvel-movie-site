@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0b08">
+  <title>神聖時間軸 MCU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-top">
+        <p class="org">TIME VARIANCE AUTHORITY // ARCHIVE</p>
+        <p class="status"><span class="status-dot"></span>TIMELINE STABLE</p>
+      </div>
+      <h1 class="logo">SACRED TIMELINE</h1>
+      <p class="tagline">神聖時間軸 ― マーベル映画 記録ファイル</p>
+    </div>
+
+    <nav class="controls" aria-label="表示切り替え">
+      <div class="segmented" role="tablist">
+        <button role="tab" class="seg-btn is-active" data-order="release" aria-selected="true">公開順</button>
+        <button role="tab" class="seg-btn" data-order="chrono" aria-selected="false">時系列順</button>
+      </div>
+      <div class="filters" id="phaseFilters"></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="spotlight" id="spotlight" aria-label="最新作"></section>
+    <p class="summary" id="summary"></p>
+    <ol class="timeline" id="timeline"></ol>
+    <p class="timeline-end">― END OF RECORDED TIMELINE ―</p>
+  </main>
+
+  <dialog class="modal" id="modal">
+    <div class="modal-bar">
+      <span>TEMPAD // CASE FILE</span>
+      <button class="modal-close" id="modalClose" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </dialog>
+
+  <footer class="site-footer">
+    <p>非公式のファンサイトです。作品名・画像等の権利は各権利者に帰属します。</p>
+    <p>時系列順は Disney+ の「時系列順」を参考にした目安です。公開日は全米公開日。</p>
+    <p class="tmdb-credit">ポスター画像：<a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB（The Movie Database）</a>。本サイトは TMDB の承認・認定を受けたものではありません。</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
